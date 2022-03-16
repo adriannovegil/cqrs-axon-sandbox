@@ -136,6 +136,8 @@ services:
       EUREKA_USER: ${EUREKA_USER}
       MONGO_USER: ${MONGO_USER}
       MONGO_PASSWORD: ${MONGO_PASSWORD}
+    ports:
+      - 8080:8080
     depends_on:
       - config
       - discovery
@@ -156,6 +158,8 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       MONGO_USER: ${MONGO_USER}
       MONGO_PASSWORD: ${MONGO_PASSWORD}
+    ports:
+      - 8081:8080
     depends_on:
       - config
       - discovery
