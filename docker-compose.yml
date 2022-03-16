@@ -130,7 +130,7 @@ services:
     build: ./catalog-command
     restart: on-failure
     environment:
-      SPRING_PROFILES_ACTIVE: docker
+      SPRING_PROFILES_ACTIVE: docker,dev
       CONFIG_SERVICE_USER: ${CONFIG_SERVICE_USER}
       CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
       EUREKA_USER: ${EUREKA_USER}
@@ -151,7 +151,7 @@ services:
     build: ./catalog-query
     restart: on-failure
     environment:
-      SPRING_PROFILES_ACTIVE: docker
+      SPRING_PROFILES_ACTIVE: docker,dev
       CONFIG_SERVICE_USER: ${CONFIG_SERVICE_USER}
       CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
       EUREKA_USER: ${EUREKA_USER}
