@@ -1,5 +1,6 @@
 package com.eshop.catalogquery.api;
 
+import com.eshop.catalog.shared.rest.error.BadRequestException;
 import com.eshop.catalogquery.application.queries.allbrands.AllBrandsQuery;
 import com.eshop.catalogquery.application.queries.allcategories.AllCategoryQuery;
 import com.eshop.catalogquery.application.queries.catalogitembyid.CatalogItemByIdQuery;
@@ -10,7 +11,6 @@ import com.eshop.catalogquery.application.querybus.QueryBus;
 import com.eshop.catalogquery.model.Brand;
 import com.eshop.catalogquery.model.CatalogItem;
 import com.eshop.catalogquery.model.Category;
-import com.eshop.shared.rest.error.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

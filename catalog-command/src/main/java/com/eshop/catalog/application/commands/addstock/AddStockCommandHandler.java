@@ -4,7 +4,7 @@ import com.eshop.catalog.application.commandbus.CatalogCommandHandler;
 import com.eshop.catalog.application.models.CatalogItemResponse;
 import com.eshop.catalog.domain.catalogitem.CatalogItemRepository;
 import com.eshop.catalog.domain.catalogitem.Units;
-import com.eshop.shared.rest.error.NotFoundException;
+import com.eshop.catalog.shared.rest.error.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.axonframework.commandhandling.CommandHandler;
 import org.springframework.stereotype.Component;

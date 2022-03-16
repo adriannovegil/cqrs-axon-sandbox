@@ -7,10 +7,9 @@ import com.eshop.catalog.application.models.CatalogItemResponse;
 import com.eshop.catalog.config.KafkaTopics;
 import com.eshop.catalog.domain.catalogitem.CatalogItemRepository;
 import com.eshop.catalog.domain.catalogitem.Price;
-import com.eshop.shared.rest.error.NotFoundException;
+import com.eshop.catalog.shared.rest.error.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.axonframework.commandhandling.CommandHandler;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

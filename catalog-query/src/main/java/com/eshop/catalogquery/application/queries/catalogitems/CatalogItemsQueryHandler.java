@@ -1,8 +1,8 @@
 package com.eshop.catalogquery.application.queries.catalogitems;
 
+import com.eshop.catalog.shared.rest.error.BadRequestException;
 import com.eshop.catalogquery.application.querybus.QueryHandler;
 import com.eshop.catalogquery.model.*;
-import com.eshop.shared.rest.error.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

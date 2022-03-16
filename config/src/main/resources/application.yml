@@ -13,8 +13,8 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/adriannovegil/e-shop-config.git
-          default-label: main     
+          uri: https://github.com/adriannovegil/cqrs-axon-sandbox-config.git
+          default-label: main
   security:
     user:
       name: ${app.config.user}
