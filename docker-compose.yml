@@ -5,7 +5,7 @@ services:
   # ============================================================================
   # Config service
   config:
-    build: ./infrastructure/config
+    build: ./config
     restart: on-failure
     environment:
       SPRING_PROFILES_ACTIVE: docker
@@ -18,12 +18,12 @@ services:
     ports:
       - 8888:8888
     networks:
-      - eshopnet
+      - sandbox
       - observabilitysandbox
 
   # Discovery service
   discovery:
-    build: ./infrastructure/discovery
+    build: ./discovery
     restart: on-failure
     environment:
       SPRING_PROFILES_ACTIVE: docker
@@ -35,7 +35,7 @@ services:
     ports:
       - 8761:8761
     networks:
-      - eshopnet
+      - sandbox
       - observabilitysandbox
 
   # database for catalog query and command
@@ -48,12 +48,12 @@ services:
     ports:
       - 27017:27017
     networks:
-      - eshopnet
+      - sandbox
       - observabilitysandbox
 
   # Database for catalog query and order processing
   postgres:
-    build: ./docker/postgres
+    build: ./postgres
     restart: always
     environment:
       POSTGRES_PASSWORD: dbpass
@@ -76,19 +76,7 @@ services:
     ports:
       - 5432:5432
     networks:
-      - eshopnet
-      - observabilitysandbox
-
-  # Redis for basket service
-  redis:
-    image: redis:6.2.4
-    restart: on-failure
-    environment:
-      REDIS_PASSWORD: pass
-    ports:
-      - 6379:6379
-    networks:
-      - eshopnet
+      - sandbox
       - observabilitysandbox
 
   # Zookeeper
@@ -97,7 +85,7 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
     networks:
-      - eshopnet
+      - sandbox
       - observabilitysandbox
 
   # Kafka
@@ -120,89 +108,7 @@ services:
     ports:
       - 9092:9092
     networks:
-      - eshopnet
-      - observabilitysandbox
-
-  # Keycloak autentication and authorization service
-  authorization-service:
-    image: jboss/keycloak:14.0.0
-    restart: on-failure
-    environment:
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: admin
-      DB_VENDOR: postgres
-      DB_ADDR: postgres
-      DB_DATABASE: keycloakdb
-      DB_SCHEMA: public
-      DB_USER: keycloak
-      DB_PASSWORD: dbpass
-      KEYCLOAK_IMPORT: /opt/jboss/keycloak/imports/eshop-realm.json
-    depends_on:
-      - postgres
-    volumes:
-      - ./docker/keycloak/eshop-realm.json:/opt/jboss/keycloak/imports/eshop-realm.json
-    ports:
-      - 8090:8080
-      - 8443:8443
-    networks:
-      - eshopnet
-      - observabilitysandbox
-
-  # Minio service
-  minio:
-    image: minio/minio
-    restart: always
-    environment:
-      MINIO_ACCESS_KEY: mystorage
-      MINIO_SECRET_KEY: mystorage
-      MINIO_REGION: eu-east
-    volumes:
-      - ./docker/minio:/data
-    command: server /data
-    ports:
-      - 8086:9000
-    networks:
-      - eshopnet
-      - observabilitysandbox
-
-  createbuckets:
-    image: minio/mc
-    depends_on:
-      - minio
-    entrypoint: >
-      /bin/sh -c "
-      /usr/bin/mc config host add myminio http://minio:9000 mystorage mystorage;
-      /usr/bin/mc rm -r --force myminio/catalog-images;
-      /usr/bin/mc mb myminio/catalog-images;
-      /usr/bin/mc policy download myminio/catalog-images;
-      exit 0;
-      "
-    networks:
-      - eshopnet
-      - observabilitysandbox
-
-  # Image proxy
-  imgproxy:
-    image: darthsim/imgproxy:latest
-    restart: always
-    # Mount a volume as local image source
-    #volumes:
-    #- ./images:/opt # link to minio volume to imgproxy's /opt folder for local filesystem.
-    environment:
-      IMGPROXY_ALLOW_ORIGIN: '*'
-      # you can link Minio volume to imgproxy and use as a local filesystem.
-      #IMGPROXY_LOCAL_FILESYSTEM_ROOT: /opt
-      IMGPROXY_USE_S3: 'true'
-      IMGPROXY_S3_ENDPOINT: http://minio:9000
-      AWS_ACCESS_KEY_ID: mystorage
-      AWS_SECRET_ACCESS_KEY: mystorage
-      AWS_REGION: eu-east
-    links:
-      - minio
-    ports:
-      - 8887:8080
-    networks:
-      - eshopnet
+      - sandbox
       - observabilitysandbox
 
   # Portainer Docker management service
@@ -214,50 +120,14 @@ services:
     ports:
       - 9000:9000
     networks:
-      - eshopnet
+      - sandbox
       - observabilitysandbox
 
   # Services
   # ============================================================================
   # Catalog command service
-  # Analytics service
-  analytics:
-    build: ./services/analytics
-    restart: on-failure
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
-      CONFIG_SERVICE_USER: ${CONFIG_SERVICE_USER}
-      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
-      EUREKA_USER: ${EUREKA_USER}
-      POSTGRES_USER: ${POSTGRES_USER}
-    depends_on:
-      - config
-      - discovery
-      - kafka
-    networks:
-      - eshopnet
-      - observabilitysandbox
-
-  # Basket service
-  basket:
-    build: ./services/basket
-    restart: on-failure
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
-      CONFIG_SERVICE_USER: ${CONFIG_SERVICE_USER}
-      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
-      EUREKA_USER: ${EUREKA_USER}
-      POSTGRES_USER: ${POSTGRES_USER}
-    depends_on:
-      - config
-      - discovery
-      - kafka
-    networks:
-      - eshopnet
-      - observabilitysandbox
-
   catalog-command:
-    build: ./services/catalog/catalog-command
+    build: ./catalog-command
     restart: on-failure
     environment:
       SPRING_PROFILES_ACTIVE: docker
@@ -271,12 +141,12 @@ services:
       - discovery
       - kafka
     networks:
-      - eshopnet
+      - sandbox
       - observabilitysandbox
 
   # Catalog query service
   catalog-query:
-    build: ./services/catalog/catalog-query
+    build: ./catalog-query
     restart: on-failure
     environment:
       SPRING_PROFILES_ACTIVE: docker
@@ -291,120 +161,12 @@ services:
       - discovery
       - kafka
     networks:
-      - eshopnet
-      - observabilitysandbox
-
-  # Order grace period task
-  order-grace-period-task: ####
-    build: ./services/order-grace-period-task
-    restart: on-failure
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
-      CONFIG_SERVICE_USER: ${CONFIG_SERVICE_USER}
-      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
-      EUREKA_USER: ${EUREKA_USER}
-      POSTGRES_USER: ${POSTGRES_USER}
-    depends_on:
-      - order-processing
-    networks:
-      - eshopnet
-      - observabilitysandbox
-
-  # Order notifications service
-  order-notifications:
-    build: ./services/order-notifications
-    restart: on-failure
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
-      CONFIG_SERVICE_USER: ${CONFIG_SERVICE_USER}
-      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
-      EUREKA_USER: ${EUREKA_USER}
-      POSTGRES_USER: ${POSTGRES_USER}
-    depends_on:
-      - config
-      - discovery
-      - kafka
-    networks:
-      - eshopnet
-      - observabilitysandbox
-
-  # Order proccessing service
-  order-processing:
-    build: ./services/order-processing
-    restart: on-failure
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
-      CONFIG_SERVICE_USER: ${CONFIG_SERVICE_USER}
-      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
-      EUREKA_USER: ${EUREKA_USER}
-      POSTGRES_USER: ${POSTGRES_USER}
-    depends_on:
-      - config
-      - discovery
-      - kafka
-    networks:
-      - eshopnet
-      - observabilitysandbox
-
-  # Payment service
-  payment:
-    build: ./services/payment
-    restart: on-failure
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
-      CONFIG_SERVICE_USER: ${CONFIG_SERVICE_USER}
-      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
-      EUREKA_USER: ${EUREKA_USER}
-      POSTGRES_USER: ${POSTGRES_USER}
-    depends_on:
-      - config
-      - discovery
-      - kafka
-    networks:
-      - eshopnet
-      - observabilitysandbox
-
-  # Image service
-  image-service:
-    build: ./infrastructure/image-service
-    restart: on-failure
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
-      CONFIG_SERVICE_USER: ${CONFIG_SERVICE_USER}
-      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
-      EUREKA_USER: ${EUREKA_USER}
-    depends_on:
-      - config
-      - discovery
-      - minio
-    ports:
-      - 7070:8080
-    networks:
-      - eshopnet
-      - observabilitysandbox
-
-  # System gateway
-  gateway:
-    build: ./infrastructure/gateway
-    restart: on-failure
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
-      CONFIG_SERVICE_USER: ${CONFIG_SERVICE_USER}
-      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
-      EUREKA_USER: ${EUREKA_USER}
-    depends_on:
-      - config
-      - discovery
-      - kafka
-    ports:
-      - 8080:8080
-    networks:
-      - eshopnet
+      - sandbox
       - observabilitysandbox
 
 networks:
-  eshopnet:
-    name: eshopnet
+  sandbox:
+    name: sandbox
     external: true
   observabilitysandbox:
     name: observabilitysandbox
