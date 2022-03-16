@@ -5,14 +5,16 @@ This project is inspired by [`e-shop`](https://github.com/hdimitrieski/e-shop) t
 In this project you can find examples of:
 
 - CQRS,
+- Event Sourcing,
 - Axon Framework,
-- Events,
+- Kafka,
+- MongoDB,
 - ...
 
-## Catalog Services
+## Services
 
-This project contains two services:
-
+- [Config](infrastructure/config) - Centralized configuration service. You can access this service at http://localhost:8888. Credentials cfguser/cfgpassword.
+- [Discovery](infrastructure/discovery) - Service registry that allows other services to find and communicate with each other. You can access this service at http://localhost:8761 and use admin/admin credentials.
 - [Catalog Command Service](catalog-command) and
 - [Catalog Query Service](catalog-query).
 
