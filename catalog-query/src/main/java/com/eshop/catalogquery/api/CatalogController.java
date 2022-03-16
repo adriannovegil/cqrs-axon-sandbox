@@ -50,7 +50,7 @@ public class CatalogController {
         if (isEmpty(ids)) {
             throw new BadRequestException("Invalid ids value");
         }
-
+        logger.info("Find catalog item ids: {}", ids);
         final var itemIds = Arrays.
                 stream(ids.split(","))
                 .map(UUID::fromString)
@@ -76,7 +76,6 @@ public class CatalogController {
             @RequestParam(required = false) UUID categoryId
     ) {
         logger.info("Find catalog items - page size: {}, page index: {}, brand: {}, type: {}", pageSize, pageIndex, brandId, categoryId);
-
         return queryBus.execute(new CatalogItemsQuery(pageSize, pageIndex, brandId, categoryId));
     }
 
@@ -106,6 +105,7 @@ public class CatalogController {
             @RequestParam(defaultValue = "0", required = false) Integer pageIndex,
             @PathVariable String name
     ) {
+        logger.info("Find catalog name: {}", name);
         if (isEmpty(name)) {
             throw new BadRequestException("The name must be at least one character long");
         }
@@ -119,6 +119,7 @@ public class CatalogController {
      */
     @RequestMapping("brands")
     public Iterable<Brand> catalogBrands() {
+        logger.info("Find brand items");
         return queryBus.execute(new AllBrandsQuery());
     }
 
@@ -129,6 +130,7 @@ public class CatalogController {
      */
     @RequestMapping("categories")
     public Iterable<Category> catalogCategories() {
+        logger.info("Find category items");
         return queryBus.execute(new AllCategoryQuery());
     }
 
