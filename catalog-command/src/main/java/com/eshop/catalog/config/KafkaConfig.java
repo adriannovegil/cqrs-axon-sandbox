@@ -1,6 +1,6 @@
 package com.eshop.catalog.config;
 
-import com.eshop.shared.eventhandling.IntegrationEvent;
+import com.eshop.catalog.shared.eventhandling.IntegrationEvent;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;

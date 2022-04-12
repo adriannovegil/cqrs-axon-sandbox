@@ -1,6 +1,6 @@
 package com.eshop.catalog.application.integrationevents;
 
-import com.eshop.shared.eventhandling.IntegrationEvent;
+import com.eshop.catalog.shared.eventhandling.IntegrationEvent;
 
 public interface IntegrationEventPublisher {
 

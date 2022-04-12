@@ -6,6 +6,7 @@ In this project you can find examples of:
 
 - CQRS,
 - Event Sourcing,
+- DDD;
 - Axon Framework,
 - Kafka,
 - MongoDB,
@@ -13,10 +14,11 @@ In this project you can find examples of:
 
 ## Services
 
-- [Config](infrastructure/config) - Centralized configuration service. You can access this service at http://localhost:8888. Credentials cfguser/cfgpassword.
-- [Discovery](infrastructure/discovery) - Service registry that allows other services to find and communicate with each other. You can access this service at http://localhost:8761 and use admin/admin credentials.
+- [Config](config) - Centralized configuration service. You can access this service at http://localhost:8888. Credentials cfguser/cfgpassword.
+- [Discovery](discovery) - Service registry that allows other services to find and communicate with each other. You can access this service at http://localhost:8761 and use admin/admin credentials.
 - [Catalog Command Service](catalog-command) and
 - [Catalog Query Service](catalog-query).
+- [Portainer](http://localhost:9000/) - Self-service management portal, allowing you to deliver containerized applications from the data centre to the edge.
 
 The services are implemented following the Domain Driven Design approach, [CQRS](https://martinfowler.com/bliki/CQRS.html) and [Event Sourcing](https://martinfowler.com/eaaDev/EventSourcing.html) implementation using [Axon](https://axoniq.io/).
 

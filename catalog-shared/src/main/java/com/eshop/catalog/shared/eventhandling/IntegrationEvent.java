@@ -1,4 +1,4 @@
-package com.eshop.shared.eventhandling;
+package com.eshop.catalog.shared.eventhandling;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
